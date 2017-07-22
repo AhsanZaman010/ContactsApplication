@@ -1,8 +1,8 @@
 package com.ahsanzaman.contactsapp.di.component;
 
+import com.ahsanzaman.contactsapp.di.module.AppModule;
 import com.ahsanzaman.contactsapp.di.module.ContactsModule;
 import com.ahsanzaman.contactsapp.di.module.NetworkModule;
-import com.ahsanzaman.contactsapp.module.contacts.view.ContactsActivity;
 
 import javax.inject.Singleton;
 
@@ -13,7 +13,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {NetworkModule.class,})
+@Component(modules = {NetworkModule.class, AppModule.class})
 public interface DepComponent {
 
     ContactsComponent plus(ContactsModule contactsModule);

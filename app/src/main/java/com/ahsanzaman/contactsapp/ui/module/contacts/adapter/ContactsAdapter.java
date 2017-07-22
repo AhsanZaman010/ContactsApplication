@@ -1,4 +1,4 @@
-package com.ahsanzaman.contactsapp.module.contacts.adapter;
+package com.ahsanzaman.contactsapp.ui.module.contacts.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

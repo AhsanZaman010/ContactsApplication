@@ -2,7 +2,7 @@ package com.ahsanzaman.contactsapp.di.module;
 
 import android.content.Context;
 
-import com.ahsanzaman.contactsapp.module.contacts.view.ContactsActivity;
+import com.ahsanzaman.contactsapp.ui.module.contacts.view.ContactsActivity;
 
 import dagger.Module;
 import dagger.Provides;

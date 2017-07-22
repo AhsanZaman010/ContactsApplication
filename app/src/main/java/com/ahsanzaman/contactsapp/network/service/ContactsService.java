@@ -3,10 +3,12 @@ package com.ahsanzaman.contactsapp.network.service;
 import android.accounts.NetworkErrorException;
 
 import com.ahsanzaman.contactsapp.model.Contact;
+import com.ahsanzaman.contactsapp.model.ContactResponse;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -29,36 +31,37 @@ public class ContactsService {
     }
 
     public Disposable getCityList(final GetContactsCallback callback) {
-
+        int a =0;
+        a++;
         return networkService.getContactList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .map(new Function<List<Contact>, List<Contact>>() {
+                .map(new Function<List<ContactResponse>, List<Contact>>() {
                     @Override
-                    public List<Contact> apply(List<Contact> contacts) throws Exception {
+                    public List<Contact> apply(List<ContactResponse> contactResponses) throws Exception {
+                        List<Contact> contacts = new ArrayList<Contact>();
+                        if(contactResponses!=null && contactResponses.size()>0) {
+                            for (ContactResponse contactResponse : contactResponses) {
+                                Contact contact = new Contact(contactResponse);
+                                contacts.add(contact);
+                            }
+                        }
                         return contacts;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends List<Contact>>>() {
-                    @Override
-                    public ObservableSource<? extends List<Contact>> apply(Throwable throwable) throws Exception {
-                        return Observable.error(throwable);
-                    }
-                })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         callback.onError(new NetworkErrorException(throwable));
                     }
                 })
-                .doOnNext(new Consumer<List<Contact>>() {
+                .subscribe(new Consumer<List<Contact>>() {
                     @Override
                     public void accept(List<Contact> contacts) throws Exception {
                         callback.onSuccess(contacts);
                     }
-                })
-                .subscribe();
+                });
     }
 
     public interface GetContactsCallback {

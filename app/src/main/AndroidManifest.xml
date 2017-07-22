@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".module.base.ContactsApplication">
-        <activity android:name=".module.contacts.view.ContactsActivity">
+        android:name=".ui.module.base.ContactsApplication">
+        <activity android:name=".ui.module.contacts.view.ContactsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

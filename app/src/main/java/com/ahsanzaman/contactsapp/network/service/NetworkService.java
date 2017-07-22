@@ -1,6 +1,7 @@
 package com.ahsanzaman.contactsapp.network.service;
 
 import com.ahsanzaman.contactsapp.model.Contact;
+import com.ahsanzaman.contactsapp.model.ContactResponse;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ import retrofit2.http.GET;
 public interface NetworkService {
 
     @GET("/contacts.json")
-    Observable<List<Contact>> getContactList();
+    Observable<List<ContactResponse>> getContactList();
 
 }

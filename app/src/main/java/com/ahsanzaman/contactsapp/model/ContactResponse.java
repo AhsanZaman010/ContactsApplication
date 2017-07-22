@@ -1,33 +1,34 @@
-
 package com.ahsanzaman.contactsapp.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
-public class Contact extends RealmObject {
+/**
+ * Created by Accolite- on 7/22/2017.
+ */
 
-    @PrimaryKey
+public class ContactResponse {
+
+    @SerializedName("id")
+    @Expose
     private long id;
+    @SerializedName("first_name")
+    @Expose
     private String firstName;
+    @SerializedName("last_name")
+    @Expose
     private String lastName;
+    @SerializedName("profile_pic")
+    @Expose
     private String profilePic;
+    @SerializedName("favorite")
+    @Expose
     private boolean favorite;
+    @SerializedName("url")
+    @Expose
     private String url;
-
-    public Contact(ContactResponse contactResponse) {
-        setId(contactResponse.getId());
-        setFirstName(contactResponse.getFirstName());
-        setLastName(contactResponse.getLastName());
-        setProfilePic(contactResponse.getProfilePic());
-        setFavorite(contactResponse.isFavorite());
-        setUrl(contactResponse.getUrl());
-    }
-
-    public Contact() {
-    }
 
     public long getId() {
         return id;
@@ -76,5 +77,6 @@ public class Contact extends RealmObject {
     public void setUrl(String url) {
         this.url = url;
     }
+
 
 }

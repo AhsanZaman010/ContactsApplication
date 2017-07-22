@@ -1,7 +1,7 @@
-package com.ahsanzaman.contactsapp.module.contacts.view;
+package com.ahsanzaman.contactsapp.ui.module.contacts.view;
 
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.module.base.BaseView;
+import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 
 import java.util.List;
 
