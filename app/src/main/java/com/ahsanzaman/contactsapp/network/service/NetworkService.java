@@ -13,7 +13,7 @@ import retrofit2.http.GET;
 
 public interface NetworkService {
 
-    @GET("v1/city")
+    @GET("/contacts.json")
     Observable<List<Contact>> getContactList();
 
 }

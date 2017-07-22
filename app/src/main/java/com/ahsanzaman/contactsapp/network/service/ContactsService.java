@@ -32,6 +32,13 @@ public class ContactsService {
 
         return networkService.getContactList()
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .map(new Function<List<Contact>, List<Contact>>() {
+                    @Override
+                    public List<Contact> apply(List<Contact> contacts) throws Exception {
+                        return contacts;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends List<Contact>>>() {
                     @Override
@@ -45,12 +52,13 @@ public class ContactsService {
                         callback.onError(new NetworkErrorException(throwable));
                     }
                 })
-                .subscribe(new Consumer<List<Contact>>() {
+                .doOnNext(new Consumer<List<Contact>>() {
                     @Override
                     public void accept(List<Contact> contacts) throws Exception {
                         callback.onSuccess(contacts);
                     }
-                });
+                })
+                .subscribe();
     }
 
     public interface GetContactsCallback {

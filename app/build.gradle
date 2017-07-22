@@ -48,4 +48,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     provided 'com.google.dagger:dagger-compiler:2.1'
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    compile 'io.realm:realm-android:0.83.0+'
 }

@@ -4,7 +4,9 @@ package com.ahsanzaman.contactsapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Contact {
+import io.realm.RealmObject;
+
+public class Contact extends RealmObject {
 
     @SerializedName("id")
     @Expose
