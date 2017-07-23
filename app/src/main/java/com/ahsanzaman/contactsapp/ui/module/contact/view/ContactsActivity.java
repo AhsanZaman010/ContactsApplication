@@ -1,4 +1,4 @@
-package com.ahsanzaman.contactsapp.ui.module.contacts.view;
+package com.ahsanzaman.contactsapp.ui.module.contact.view;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import com.ahsanzaman.contactsapp.model.Contact;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseActivity;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.ContactsApplication;
-import com.ahsanzaman.contactsapp.ui.module.contacts.adapter.ContactsAdapter;
-import com.ahsanzaman.contactsapp.ui.module.contacts.presenter.ContactsPresenter;
+import com.ahsanzaman.contactsapp.ui.module.contact.adapter.ContactsAdapter;
+import com.ahsanzaman.contactsapp.ui.module.contact.presenter.ContactsPresenter;
 
 import java.util.ArrayList;
 import java.util.List;

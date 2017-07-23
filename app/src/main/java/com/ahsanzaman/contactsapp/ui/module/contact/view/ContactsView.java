@@ -1,4 +1,4 @@
-package com.ahsanzaman.contactsapp.ui.module.contacts.view;
+package com.ahsanzaman.contactsapp.ui.module.contact.view;
 
 import com.ahsanzaman.contactsapp.model.Contact;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;

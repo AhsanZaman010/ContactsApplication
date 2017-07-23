@@ -1,7 +1,7 @@
 package com.ahsanzaman.contactsapp.di.component;
 
 import com.ahsanzaman.contactsapp.di.module.ContactsModule;
-import com.ahsanzaman.contactsapp.ui.module.contacts.view.ContactsActivity;
+import com.ahsanzaman.contactsapp.ui.module.contact.view.ContactsActivity;
 
 import dagger.Subcomponent;
 

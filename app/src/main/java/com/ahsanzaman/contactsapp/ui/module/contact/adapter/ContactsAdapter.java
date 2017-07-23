@@ -1,4 +1,4 @@
-package com.ahsanzaman.contactsapp.ui.module.contacts.adapter;
+package com.ahsanzaman.contactsapp.ui.module.contact.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ahsanzaman.contactsapp.R;
 import com.ahsanzaman.contactsapp.model.Contact;
+import com.ahsanzaman.contactsapp.utils.ContactUtils;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder holder, int position) {
-        holder.bind(mItems.get(position), listener);
+        holder.bind(mItems.get(position), listener, position);
 
         //String images = mItems.get(position).getBackground();
 
@@ -91,12 +92,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         }
 
 
-        public void bind(final Contact contact, final OnItemClickListener listener) {
-            mHeaderTV.setText(contact.getFirstName() + " " + contact.getLastName());
-            if(!TextUtils.isEmpty(contact.getFirstName())){
-                mLabelTV.setText(contact.getFirstName().charAt(0) + "");
-            } else if(!TextUtils.isEmpty(contact.getLastName())){
-                mLabelTV.setText(contact.getLastName().charAt(0) + "");
+        public void bind(final Contact contact, final OnItemClickListener listener, int position) {
+            mNameTV.setText(contact.getFirstName() + " " + contact.getLastName());
+            String label = ContactUtils.getLabel(contact);
+            if(!TextUtils.isEmpty(label)){
+                mLabelTV.setText(label);
+            } else {
+
+            }
+            if(ContactUtils.isHeader(mItems, position)){
+                mHeaderTV.setVisibility(View.VISIBLE);
+                mHeaderTV.setText(label);
+            } else {
+                mHeaderTV.setVisibility(View.INVISIBLE);
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

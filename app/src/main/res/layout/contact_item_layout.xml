@@ -7,12 +7,13 @@
     android:paddingBottom="8dp">
     <TextView
         android:id="@+id/header_text"
-        android:layout_width="wrap_content"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_large"
         android:textColor="#689F3B"
         android:layout_marginLeft="16dp"
         android:text="A"
+        android:gravity="center"
         />
     <TextView
         android:id="@+id/label_text"
