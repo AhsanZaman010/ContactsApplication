@@ -13,7 +13,7 @@ import io.realm.RealmResults;
 public interface IContactsRepository {
     void addContact(Contact contact);
 
-    Contact getContactById(String id);
+    Contact getContactById(Long id);
 
     List<Contact> getAllContacts();
 

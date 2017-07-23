@@ -46,7 +46,7 @@ public class ContactsRepository implements IContactsRepository{
 
 
     @Override
-    public Contact getContactById(String id) {
+    public Contact getContactById(Long id) {
         Realm realm = Realm.getInstance(mApplication);
         Contact result = realm.where(Contact.class).equalTo(ID, id).findFirst();
         return result;

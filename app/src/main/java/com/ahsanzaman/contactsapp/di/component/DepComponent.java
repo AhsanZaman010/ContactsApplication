@@ -1,6 +1,7 @@
 package com.ahsanzaman.contactsapp.di.component;
 
 import com.ahsanzaman.contactsapp.di.module.AppModule;
+import com.ahsanzaman.contactsapp.di.module.ContactDetailsModule;
 import com.ahsanzaman.contactsapp.di.module.ContactsModule;
 import com.ahsanzaman.contactsapp.di.module.NetworkModule;
 
@@ -17,4 +18,6 @@ import dagger.Component;
 public interface DepComponent {
 
     ContactsComponent plus(ContactsModule contactsModule);
+
+    ContactsComponent plus(ContactDetailsModule contactDetailsModule);
 }
