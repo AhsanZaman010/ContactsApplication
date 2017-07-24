@@ -7,4 +7,8 @@
     <dimen name="edit_text_regular_size">16sp</dimen>
     <dimen name="x_large_padding">48dp</dimen>
     <dimen name="large_padding">32dp</dimen>
+    <dimen name="elevation_padding">6dp</dimen>
+    <dimen name="corner_radius">3dp</dimen>
+    <dimen name="card_margin">10dp</dimen>
+    <dimen name="icon_padding">4dp</dimen>
 </resources>

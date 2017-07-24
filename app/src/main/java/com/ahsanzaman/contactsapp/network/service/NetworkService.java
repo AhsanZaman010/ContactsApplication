@@ -1,7 +1,6 @@
 package com.ahsanzaman.contactsapp.network.service;
 
-import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.ContactResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactResponse;
 
 import java.util.List;
 

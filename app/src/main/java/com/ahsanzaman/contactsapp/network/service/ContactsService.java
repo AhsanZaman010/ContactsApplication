@@ -3,16 +3,11 @@ package com.ahsanzaman.contactsapp.network.service;
 import android.accounts.NetworkErrorException;
 
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.ContactResponse;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+import com.ahsanzaman.contactsapp.model.response.ContactResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;

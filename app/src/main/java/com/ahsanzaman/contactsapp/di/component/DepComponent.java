@@ -19,5 +19,5 @@ public interface DepComponent {
 
     ContactsComponent plus(ContactsModule contactsModule);
 
-    ContactsComponent plus(ContactDetailsModule contactDetailsModule);
+    ContactDetailsComponent plus(ContactDetailsModule contactDetailsModule);
 }

@@ -8,13 +8,14 @@ import com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsA
 import dagger.Subcomponent;
 
 /**
- * Created by Accolite- on 7/22/2017.
+ * Created by Ahsan Zaman on 24-07-2017.
  */
-@Subcomponent(
-        modules = {ContactsModule.class, }
-)
-public interface ContactsComponent {
 
-        void inject(ContactsActivity contactsActivity);
+@Subcomponent(
+        modules = {ContactDetailsModule.class}
+)
+public interface ContactDetailsComponent {
+
+    void inject(ContactDetailsActivity contactDetailsActivity);
 
 }

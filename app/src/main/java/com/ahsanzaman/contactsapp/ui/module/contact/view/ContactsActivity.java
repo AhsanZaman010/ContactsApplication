@@ -1,6 +1,7 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.ContactsApplication;
 import com.ahsanzaman.contactsapp.ui.module.contact.adapter.ContactsAdapter;
 import com.ahsanzaman.contactsapp.ui.module.contact.presenter.ContactsPresenter;
+import com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,9 @@ public class ContactsActivity extends BaseActivity implements ContactsView {
             @Override
             public void onClick(Contact item) {
                 mContactsPresenter.onItemClick(item);
+                Intent intent = new Intent(ContactsActivity.this, ContactDetailsActivity.class);
+                intent.putExtra(ContactDetailsActivity.CONTACT_ID, item.getId());
+                startActivity(intent);
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

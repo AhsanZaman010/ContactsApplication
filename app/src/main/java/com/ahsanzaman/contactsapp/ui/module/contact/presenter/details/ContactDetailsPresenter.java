@@ -26,4 +26,21 @@ public class ContactDetailsPresenter extends BasePresenter {
         mContactDetailsView = (ContactDetailsView) context;
         mContact = contactsRepository.getContactById(contactID);
     }
+
+    public boolean toggleFavourite() {
+        return false;
+    }
+
+    public boolean isFavourite() {
+        if(mContact!=null)
+        return mContact.isFavorite();
+        return false;
+    }
+
+    public String getName() {
+        if(mContact!=null){
+            return mContact.getFirstName()+" "+ mContact.getLastName();
+        }
+        return "";
+    }
 }

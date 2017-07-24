@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/item_view"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="?selectableItemBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/icon_start_iv"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="28dp"
+        android:layout_marginTop="26dp"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/icon_padding"
+        android:src="@drawable/ic_call_blue" />
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="26dp"
+        android:layout_toRightOf="@id/icon_start_iv"
+        android:layout_width="match_parent">
+
+        <ImageView
+            android:id="@+id/icon_end_iv"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_message"
+            android:background="?selectableItemBackground"/>
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/icon_end_iv"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:ellipsize="end"
+                android:id="@+id/title_tv"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:maxLines="1"
+                android:text="0050505005"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:ellipsize="end"
+                android:id="@+id/description_tv"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:maxLines="1"
+                android:text="Mobile"
+                android:textSize="@dimen/text_size_regular" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:background="#cccccc"
+        android:layout_below="@id/title_rl"
+        android:layout_height="1dp"
+        android:layout_toRightOf="@id/icon_start_iv"
+        android:layout_width="match_parent" />
+</RelativeLayout>
