@@ -1,5 +1,8 @@
 package com.ahsanzaman.contactsapp.model.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Ahsan Zaman on 24-07-2017.
  */
 
-public class ContactDetailResponse {
+public class ContactDetailResponse extends ResponeObject implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -36,6 +39,52 @@ public class ContactDetailResponse {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    public ContactDetailResponse(){
+
+    }
+
+    protected ContactDetailResponse(Parcel in) {
+        id = in.readLong();
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        phoneNumber = in.readString();
+        profilePic = in.readString();
+        favorite = in.readByte() != 0;
+        createdAt = in.readString();
+        updatedAt = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        dest.writeString(phoneNumber);
+        dest.writeString(profilePic);
+        dest.writeByte((byte) (favorite ? 1 : 0));
+        dest.writeString(createdAt);
+        dest.writeString(updatedAt);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ContactDetailResponse> CREATOR = new Creator<ContactDetailResponse>() {
+        @Override
+        public ContactDetailResponse createFromParcel(Parcel in) {
+            return new ContactDetailResponse(in);
+        }
+
+        @Override
+        public ContactDetailResponse[] newArray(int size) {
+            return new ContactDetailResponse[size];
+        }
+    };
 
     public long getId() {
         return id;

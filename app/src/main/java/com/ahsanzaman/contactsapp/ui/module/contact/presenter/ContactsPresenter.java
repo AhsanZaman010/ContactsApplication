@@ -7,7 +7,9 @@ import android.util.Log;
 import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
 import com.ahsanzaman.contactsapp.model.Contact;
 import com.ahsanzaman.contactsapp.network.service.ContactsService;
+import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
+import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 import com.ahsanzaman.contactsapp.ui.module.contact.view.ContactsView;
 import com.ahsanzaman.contactsapp.utils.ContactUtils;
 
@@ -21,8 +23,9 @@ import io.reactivex.disposables.Disposable;
  * Created by Accolite- on 7/21/2017.
  */
 
-public class ContactsPresenter extends BasePresenter implements ContactsService.GetContactsCallback {
+public class ContactsPresenter extends BasePresenter {
 
+    private static final int CONTACTS_REQUEST_CODE = 101;
     private final String TAG = getClass().getSimpleName();
 
     private final ContactsService mContactsService;
@@ -30,9 +33,10 @@ public class ContactsPresenter extends BasePresenter implements ContactsService.
     private final IContactsRepository mContactsRepository;
 
     @Inject
-    public ContactsPresenter(ContactsService contactsService, Context contactsActivity, IContactsRepository contactsRepository) {
+    public ContactsPresenter(ContactsService contactsService, Context context, IContactsRepository contactsRepository) {
+        super((BaseView) context);
         mContactsService = contactsService;
-        mContactsView = (ContactsView) contactsActivity;
+        mContactsView = (ContactsView) context;
         mContactsRepository = contactsRepository;
     }
 
@@ -48,14 +52,8 @@ public class ContactsPresenter extends BasePresenter implements ContactsService.
     }
 
     public void getContactsFromRemote() {
-        Disposable disposable = mContactsService.getCityList(ContactsPresenter.this);
+        Disposable disposable = mContactsService.getContactsList(ContactsPresenter.this, CONTACTS_REQUEST_CODE);
         mCompositeDisposable.add(disposable);
-    }
-
-    @Override
-    public void onSuccess(final List<Contact> contactList) {
-        mContactsRepository.setAllContacts(contactList);
-        showContacts(contactList);
     }
 
     public void showContacts(List<Contact> contactList) {
@@ -64,13 +62,15 @@ public class ContactsPresenter extends BasePresenter implements ContactsService.
         mContactsView.updateContacts(contactList);
     }
 
-    @Override
-    public void onError(NetworkErrorException networkError) {
-        Log.e(TAG, "Error loading contacts");
-        mContactsView.hideLoading();
-    }
-
     public void onItemClick(Contact item) {
 
+    }
+
+    @Override
+    public void onSuccess(Object responseObject, int requestCode) {
+        super.onSuccess(responseObject, requestCode);
+        List<Contact> contactList = (List<Contact>) responseObject;
+        mContactsRepository.setAllContacts(contactList);
+        showContacts(contactList);
     }
 }

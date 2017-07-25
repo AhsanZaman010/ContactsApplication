@@ -9,7 +9,7 @@ import io.realm.RealmObject;
  * Created by Accolite- on 7/22/2017.
  */
 
-public class ContactResponse {
+public class ContactResponse extends ResponeObject {
 
     @SerializedName("id")
     @Expose

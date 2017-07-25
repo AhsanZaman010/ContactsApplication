@@ -1,7 +1,14 @@
 package com.ahsanzaman.contactsapp.ui.module.base;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+
+import com.ahsanzaman.contactsapp.R;
+import com.ahsanzaman.contactsapp.network.ResponseCodes;
 
 /**
  * Created by Accolite- on 7/21/2017.
@@ -10,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 public abstract class BaseActivity extends AppCompatActivity implements BaseView{
 
     private ProgressDialog mProgressDialog;
+    protected AlertDialog mAlertDialog;
 
     @Override
     public void showLoading() {
@@ -47,5 +55,51 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
 
     protected abstract BasePresenter getPresenter();
 
+    @Override
+    public void showError(String status) {
+        String message, title;
+        switch (status) {
+            case ResponseCodes.NOT_FOUND:
+                message = getString(R.string.not_found);
+                title = getString(R.string.error);
+                break;
+            default:
+                message = "Something went wrong: " + status;
+                title = getString(R.string.error);
+                break;
+        }
 
+        if (mAlertDialog == null) {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+                mAlertDialog = builder
+                        .setTitle(title)
+                        .setMessage(message)
+                    .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            retry();
+                        }
+                    })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                onCancelErrorDialog(dialog);
+                            }
+                        })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        } else {
+            mAlertDialog.setMessage(message);
+            mAlertDialog.setTitle(title);
+            mAlertDialog.show();
+        }
+    }
+
+    protected abstract void retry();
+
+    protected abstract void onCancelErrorDialog(DialogInterface dialog);
 }

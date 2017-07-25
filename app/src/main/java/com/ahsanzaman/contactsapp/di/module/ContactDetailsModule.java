@@ -1,8 +1,8 @@
 package com.ahsanzaman.contactsapp.di.module;
 
+import android.app.Activity;
 import android.content.Context;
 
-import com.ahsanzaman.contactsapp.model.Contact;
 import com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsActivity;
 
 import dagger.Module;
@@ -16,17 +16,17 @@ import dagger.Provides;
 public class ContactDetailsModule {
 
 
-    private final ContactDetailsActivity mContactDetailsActivity;
+    private final Activity mActivity;
     private final Long mContactID;
 
-    public ContactDetailsModule(ContactDetailsActivity contactDetailsActivity, Long contactID) {
-        mContactDetailsActivity = contactDetailsActivity;
+    public ContactDetailsModule(Activity activity, Long contactID) {
+        mActivity = activity;
         mContactID = contactID;
     }
 
     @Provides
     Context providesContext() {
-        return mContactDetailsActivity;
+        return mActivity;
     }
 
     @Provides

@@ -3,7 +3,10 @@ package com.ahsanzaman.contactsapp.network.service;
 import android.accounts.NetworkErrorException;
 
 import com.ahsanzaman.contactsapp.model.Contact;
+import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
 import com.ahsanzaman.contactsapp.model.response.ContactResponse;
+import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
+import com.ahsanzaman.contactsapp.ui.module.contact.presenter.add.AddContactPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +28,7 @@ public class ContactsService {
         this.networkService = networkService;
     }
 
-    public Disposable getCityList(final GetContactsCallback callback) {
-        int a =0;
-        a++;
+    public Disposable getContactsList(final RemoteServiceCallback callback, final int requestCode) {
         return networkService.getContactList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -48,20 +49,68 @@ public class ContactsService {
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        callback.onError(new NetworkErrorException(throwable));
+                        callback.onError(new NetworkErrorException(throwable), requestCode);
                     }
                 })
                 .subscribe(new Consumer<List<Contact>>() {
                     @Override
                     public void accept(List<Contact> contacts) throws Exception {
-                        callback.onSuccess(contacts);
+                        callback.onSuccess(contacts, requestCode);
                     }
                 });
     }
 
-    public interface GetContactsCallback {
-        void onSuccess(List<Contact> contactList);
+    public Disposable getContactDetail(final RemoteServiceCallback callback, long id, final int requestCode) {
+        return networkService.getContactDetail(id+"")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        callback.onError(new NetworkErrorException(throwable), requestCode);
+                    }
+                })
+                .subscribe(new Consumer<ContactDetailResponse>() {
+                    @Override
+                    public void accept(ContactDetailResponse contactDetailResponse) throws Exception {
+                        callback.onSuccess(contactDetailResponse, requestCode);
+                    }
+                });
+    }
 
-        void onError(NetworkErrorException networkError);
+    public Disposable editContactDetail(final RemoteServiceCallback callback, long id, final int requestCode, ContactDetailResponse contactDetailResponse) {
+        return networkService.editContactDetail(id+"", contactDetailResponse)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        callback.onError(new NetworkErrorException(throwable), requestCode);
+                    }
+                })
+                .subscribe(new Consumer<ContactDetailResponse>() {
+                    @Override
+                    public void accept(ContactDetailResponse contactDetailResponse) throws Exception {
+                        callback.onSuccess(contactDetailResponse, requestCode);
+                    }
+                });
+    }
+
+    public Disposable addContactDetail(final RemoteServiceCallback callback, final int requestCode, ContactDetailResponse contactDetail) {
+        return networkService.addContact(contactDetail)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        callback.onError(new NetworkErrorException(throwable), requestCode);
+                    }
+                })
+                .subscribe(new Consumer<ContactDetailResponse>() {
+                    @Override
+                    public void accept(ContactDetailResponse contactDetailResponse) throws Exception {
+                        callback.onSuccess(contactDetailResponse, requestCode);
+                    }
+                });
     }
 }

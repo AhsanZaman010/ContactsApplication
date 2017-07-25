@@ -4,4 +4,9 @@
     <string name="share">Share</string>
     <string name="action_favorite">favourite</string>
     <string name="edit">Edit</string>
+    <string name="edit_contact_title">Edit contact</string>
+    <string name="contact_not_found">Contact not found</string>
+    <string name="add_contact_title">Add new contact</string>
+    <string name="not_found">Not found</string>
+    <string name="error">Error</string>
 </resources>

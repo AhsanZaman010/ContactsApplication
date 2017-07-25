@@ -1,8 +1,11 @@
 package com.ahsanzaman.contactsapp.di.component;
 
+import android.app.Activity;
+
 import com.ahsanzaman.contactsapp.di.module.AppModule;
 import com.ahsanzaman.contactsapp.di.module.ContactDetailsModule;
 import com.ahsanzaman.contactsapp.di.module.ContactsModule;
+import com.ahsanzaman.contactsapp.di.module.EditContactModule;
 import com.ahsanzaman.contactsapp.di.module.NetworkModule;
 
 import javax.inject.Singleton;
@@ -20,4 +23,8 @@ public interface DepComponent {
     ContactsComponent plus(ContactsModule contactsModule);
 
     ContactDetailsComponent plus(ContactDetailsModule contactDetailsModule);
+
+    EditContactComponent plus(EditContactModule editContactModule);
+
+    void inject(Activity activity);
 }

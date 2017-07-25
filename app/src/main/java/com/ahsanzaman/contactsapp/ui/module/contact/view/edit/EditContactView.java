@@ -1,5 +1,6 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view.edit;
 
+import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 
 /**
@@ -7,4 +8,9 @@ import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
  */
 
 public interface EditContactView extends BaseView {
+    void bindToContact(ContactDetailResponse contactDetailResponse);
+
+    ContactDetailResponse getContactDetail();
+
+    void finishOnSuccess(ContactDetailResponse contactDetailResponse);
 }

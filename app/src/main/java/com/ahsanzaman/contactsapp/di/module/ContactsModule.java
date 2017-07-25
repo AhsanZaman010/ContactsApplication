@@ -1,5 +1,6 @@
 package com.ahsanzaman.contactsapp.di.module;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.ahsanzaman.contactsapp.ui.module.contact.view.ContactsActivity;
@@ -15,15 +16,15 @@ import dagger.Provides;
 public class ContactsModule {
 
 
-    private final ContactsActivity mContactsActivity;
+    private final Activity mActivity;
 
-    public ContactsModule(ContactsActivity contactsActivity) {
-        mContactsActivity = contactsActivity;
+    public ContactsModule(Activity contactsActivity) {
+        mActivity = contactsActivity;
     }
 
     @Provides
     Context providesContext() {
-        return mContactsActivity;
+        return mActivity;
     }
 
 }

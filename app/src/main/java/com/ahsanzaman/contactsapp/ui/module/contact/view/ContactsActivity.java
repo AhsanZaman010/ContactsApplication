@@ -1,6 +1,7 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,6 +58,17 @@ public class ContactsActivity extends BaseActivity implements ContactsView {
     @Override
     protected BasePresenter getPresenter() {
         return mContactsPresenter;
+    }
+
+    @Override
+    protected void retry() {
+        mContactsPresenter.getContacts();
+    }
+
+    @Override
+    protected void onCancelErrorDialog(DialogInterface dialog) {
+        dialog.dismiss();
+        retry();
     }
 
     @Override

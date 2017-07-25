@@ -1,5 +1,7 @@
 package com.ahsanzaman.contactsapp.di.component;
 
+import android.app.Activity;
+
 import com.ahsanzaman.contactsapp.di.module.ContactDetailsModule;
 import com.ahsanzaman.contactsapp.di.module.ContactsModule;
 import com.ahsanzaman.contactsapp.ui.module.contact.view.ContactsActivity;
@@ -15,6 +17,6 @@ import dagger.Subcomponent;
 )
 public interface ContactsComponent {
 
-        void inject(ContactsActivity contactsActivity);
+        void inject(Activity contactsActivity);
 
 }
