@@ -104,16 +104,4 @@ public class ContactDetailsPresenter extends BasePresenter implements RemoteServ
             mContactDetailsView.dial(mContactDetail.getPhoneNumber());
         }
     }
-
-    public interface SMSCallbackListener{
-        void sendSMS();
-    }
-
-    public interface PhoneCallbackListener{
-        void callNumber();
-    }
-
-    public interface EmailCallbackListener{
-        void sendMail();
-    }
 }
