@@ -1,15 +1,16 @@
 package com.ahsanzaman.contactsapp.data.repository;
 
-import android.app.Application;
+import android.support.annotation.NonNull;
 
 import com.ahsanzaman.contactsapp.model.Contact;
+import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
+import com.ahsanzaman.contactsapp.network.service.IContactsService;
+import com.ahsanzaman.contactsapp.utils.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Accolite- on 7/22/2017.
@@ -18,77 +19,49 @@ import io.realm.RealmResults;
 public class ContactsRepository implements IContactsRepository{
 
     private static final String ID = "id";
-    private static ContactsRepository sInstance;
-    private final Application mApplication;
+    private final IContactsService mContactsService;
+    private final ILocalRepository mLocalRepository;
+    private List<Contact> mCachedContacts;
 
-    private ContactsRepository(Application application){
-        this.mApplication = application;
+    public ContactsRepository(IContactsService contactsService, ILocalRepository localRepository){
+        mContactsService = contactsService;
+        mLocalRepository = localRepository;
     }
 
-    public static synchronized ContactsRepository getInstance(Application application){
-        if(sInstance == null){
-            sInstance = new ContactsRepository(application);
+    @Override
+    public Disposable getContacts(@NonNull final RemoteServiceCallback callback, int requestCode) {
+        Disposable disposable = null;
+        if(mCachedContacts ==null || mCachedContacts.size() == 0) {
+            List<Contact> contacts = mLocalRepository.getAllContacts();
+            if(CollectionUtils.isEmpty(contacts)){
+                disposable = mContactsService.getContactsList(callback, requestCode);
+            } else {
+                callback.onSuccess(contacts, requestCode);
+            }
+        } else {
+            callback.onSuccess(mCachedContacts, requestCode);
         }
-        return sInstance;
+        return disposable;
     }
 
     @Override
-    public void addContact(Contact contact) {
-       /* Realm realm = Realm.getInstance(mApplication);
-        realm.beginTransaction();
-        Contact u = realm.createObject(Contact.class);
-        u.setId(UUID.randomUUID().toString());
-        u.setName(contact.getName());
-        realm.commitTransaction();
-        if (callback != null)
-            callback.onSuccess();*/
-    }
-
-
-    @Override
-    public Contact getContactById(Long id) {
-        Realm realm = Realm.getInstance(mApplication);
-        Contact result = realm.where(Contact.class).equalTo(ID, id).findFirst();
-        return result;
+    public Disposable getContactDetail(RemoteServiceCallback callback, long id, int requestCode) {
+        return mContactsService.getContactDetail(callback, id, requestCode);
     }
 
     @Override
-    public List<Contact> getAllContacts() {
-        Realm realm = Realm.getInstance(mApplication);
-        RealmQuery query = realm.where(Contact.class);
-        List<Contact> contacts = new ArrayList<>(query.findAll());
-        return contacts;
+    public Disposable editContactDetail(RemoteServiceCallback callback, long id, int requestCode, ContactDetailResponse contactDetailResponse) {
+        return mContactsService.editContactDetail(callback, id, requestCode, contactDetailResponse);
     }
 
     @Override
-    public void clearContacts() {
-        Realm realm = Realm.getInstance(mApplication);
-        realm.beginTransaction();
-        RealmQuery query = realm.where(Contact.class);
-        RealmResults results = query.findAll();
-        results.clear();
-        realm.commitTransaction();
-
-    }
-
-
-    @Override
-    public List<Contact> setAllContacts(List<Contact> contacts) {
-        clearContacts();
-        Realm realm = Realm.getInstance(mApplication);
-        realm.beginTransaction();
-        realm.copyToRealm(contacts);
-        realm.commitTransaction();
-        return contacts;
+    public Disposable addContactDetail(RemoteServiceCallback callback, int requestCode, ContactDetailResponse contactDetail) {
+        return mContactsService.addContactDetail(callback, requestCode, contactDetail);
     }
 
     @Override
-    public void updateContact(Contact contact) {
-        clearContacts();
-        Realm realm = Realm.getInstance(mApplication);
-        realm.beginTransaction();
-        realm.copyToRealm(contact);
-        realm.commitTransaction();
+    public ILocalRepository getLocalRepository() {
+        return mLocalRepository;
     }
 
 }

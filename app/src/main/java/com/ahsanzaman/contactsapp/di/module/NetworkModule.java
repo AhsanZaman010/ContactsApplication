@@ -1,7 +1,16 @@
 package com.ahsanzaman.contactsapp.di.module;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
+import android.support.annotation.NonNull;
+
 import com.ahsanzaman.contactsapp.BuildConfig;
-import com.ahsanzaman.contactsapp.network.service.ContactsService;
+import com.ahsanzaman.contactsapp.data.repository.ContactsRepository;
+import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
+import com.ahsanzaman.contactsapp.data.repository.ILocalRepository;
+import com.ahsanzaman.contactsapp.data.repository.RealmRepository;
+import com.ahsanzaman.contactsapp.network.service.ContactService;
+import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.network.service.NetworkService;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -26,10 +35,12 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @Module
 public class NetworkModule {
-    File cacheFile;
+    private final Application mApplication;
+    private File cacheFile;
 
-    public NetworkModule(File cacheFile) {
+    public NetworkModule(File cacheFile, Application application) {
         this.cacheFile = cacheFile;
+        mApplication = application;
     }
 
     @Provides
@@ -45,11 +56,11 @@ public class NetworkModule {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
                     @Override
-                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                    public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
                         Request original = chain.request();
 
                         // Customize the request
-                        Request request = original.newBuilder()
+                        @SuppressLint("DefaultLocale") Request request = original.newBuilder()
                                 .header("Content-Type", "application/json")
                                 .removeHeader("Pragma")
                                 .header("Cache-Control", String.format("max-age=%d", BuildConfig.CACHETIME))
@@ -86,9 +97,21 @@ public class NetworkModule {
     @Provides
     @Singleton
     @SuppressWarnings("unused")
-    public ContactsService providesService(
+    public IContactsService providesService(
             NetworkService networkService) {
-        return new ContactsService(networkService);
+        return new ContactService(networkService);
+    }
+
+    @Provides
+    @Singleton
+    IContactsRepository providesRepository(IContactsService contactsService, ILocalRepository localRepository) {
+        return new ContactsRepository(contactsService, localRepository);
+    }
+
+    @Provides
+    @Singleton
+    ILocalRepository providesLocalRepository(Application application) {
+        return new RealmRepository(application);
     }
 
 }

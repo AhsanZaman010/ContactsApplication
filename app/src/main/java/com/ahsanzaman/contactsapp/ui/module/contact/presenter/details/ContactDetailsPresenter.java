@@ -14,7 +14,7 @@ import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
 import com.ahsanzaman.contactsapp.model.Contact;
 import com.ahsanzaman.contactsapp.model.ContactDetail;
 import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
-import com.ahsanzaman.contactsapp.network.service.ContactsService;
+import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
@@ -35,14 +35,14 @@ import static com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactD
 public class ContactDetailsPresenter extends BasePresenter implements RemoteServiceCallback{
 
     private static final int CONTACT_DETAIL_REQUEST_CODE = 101;
-    private final ContactsService mContactsService;
+    private final IContactsService mContactsService;
     private final ContactDetailsView mContactDetailsView;
     private final Contact mContact;
     private final IContactsRepository mContactRepository;
     private ContactDetailResponse mContactDetailResponse;
 
     @Inject
-    public ContactDetailsPresenter(ContactsService contactsService, Context context, Long contactID, IContactsRepository contactsRepository) {
+    public ContactDetailsPresenter(IContactsService contactsService, Context context, Long contactID, IContactsRepository contactsRepository) {
         super((BaseView) context);
         mContactsService = contactsService;
         mContactDetailsView = (ContactDetailsView) context;

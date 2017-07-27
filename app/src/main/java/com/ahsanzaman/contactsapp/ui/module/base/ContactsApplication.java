@@ -33,7 +33,7 @@ public class ContactsApplication extends Application {
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
         deps = DaggerDepComponent.builder()
-                .networkModule(new NetworkModule(cacheFile))
+                .networkModule(new NetworkModule(cacheFile, this))
                 .appModule(new AppModule(this))
                 .build();
 

@@ -53,6 +53,7 @@ public class ContactsActivity extends BaseActivity implements ContactsView {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mContactsAdapter);
+        mContactsPresenter.loadContacts(false);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ContactsActivity extends BaseActivity implements ContactsView {
 
     @Override
     protected void retry() {
-        mContactsPresenter.getContacts();
+        mContactsPresenter.loadContacts(true);
     }
 
     @Override
@@ -80,6 +81,5 @@ public class ContactsActivity extends BaseActivity implements ContactsView {
     @Override
     protected void onStart() {
         super.onStart();
-        mContactsPresenter.getContacts();
     }
 }

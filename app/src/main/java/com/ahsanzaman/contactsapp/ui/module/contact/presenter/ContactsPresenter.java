@@ -1,13 +1,11 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.presenter;
 
-import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.util.Log;
 
 import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.network.service.ContactsService;
-import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
+import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 import com.ahsanzaman.contactsapp.ui.module.contact.view.ContactsView;
@@ -28,32 +26,25 @@ public class ContactsPresenter extends BasePresenter {
     private static final int CONTACTS_REQUEST_CODE = 101;
     private final String TAG = getClass().getSimpleName();
 
-    private final ContactsService mContactsService;
     private final ContactsView mContactsView;
     private final IContactsRepository mContactsRepository;
 
     @Inject
-    public ContactsPresenter(ContactsService contactsService, Context context, IContactsRepository contactsRepository) {
-        super((BaseView) context);
-        mContactsService = contactsService;
-        mContactsView = (ContactsView) context;
+    public ContactsPresenter(ContactsView contactsView, IContactsRepository contactsRepository) {
+        super(contactsView);
+        mContactsView = contactsView;
         mContactsRepository = contactsRepository;
     }
 
-    public void getContacts(){
+    public void loadContacts(boolean forceUpdate){
         mContactsView.showLoading();
-        List<Contact> contacts = mContactsRepository.getAllContacts();
-        if(contacts == null || contacts.size() == 0){
-            getContactsFromRemote();
-        } else {
-            ContactUtils.sortContacts(contacts);
-            ContactsPresenter.this.showContacts(contacts);
+        if(forceUpdate){
+            mContactsRepository.getLocalRepository().clearContacts();
         }
-    }
-
-    public void getContactsFromRemote() {
-        Disposable disposable = mContactsService.getContactsList(ContactsPresenter.this, CONTACTS_REQUEST_CODE);
-        mCompositeDisposable.add(disposable);
+        Disposable disposable = mContactsRepository.getContacts(this, CONTACTS_REQUEST_CODE);
+        if(disposable!=null){
+            mCompositeDisposable.add(disposable);
+        }
     }
 
     public void showContacts(List<Contact> contactList) {
@@ -70,7 +61,7 @@ public class ContactsPresenter extends BasePresenter {
     public void onSuccess(Object responseObject, int requestCode) {
         super.onSuccess(responseObject, requestCode);
         List<Contact> contactList = (List<Contact>) responseObject;
-        mContactsRepository.setAllContacts(contactList);
+        mContactsRepository.getLocalRepository().setAllContacts(contactList);
         showContacts(contactList);
     }
 }

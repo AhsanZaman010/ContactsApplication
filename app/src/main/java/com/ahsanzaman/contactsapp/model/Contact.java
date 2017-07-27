@@ -29,6 +29,13 @@ public class Contact extends RealmObject {
         setUrl(contactResponse.getUrl());
     }
 
+    public Contact(long id, String firstName, String lastName, boolean favorite) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.favorite = favorite;
+    }
+
     public Contact() {
     }
 

@@ -6,7 +6,6 @@ import com.ahsanzaman.contactsapp.model.Contact;
 import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
 import com.ahsanzaman.contactsapp.model.response.ContactResponse;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
-import com.ahsanzaman.contactsapp.ui.module.contact.presenter.add.AddContactPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +20,14 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Accolite- on 7/21/2017.
  */
 
-public class ContactsService {
+public class ContactService implements IContactsService {
     private final NetworkService networkService;
 
-    public ContactsService(NetworkService networkService) {
+    public ContactService(NetworkService networkService) {
         this.networkService = networkService;
     }
 
+    @Override
     public Disposable getContactsList(final RemoteServiceCallback callback, final int requestCode) {
         return networkService.getContactList()
                 .subscribeOn(Schedulers.io())
@@ -60,6 +60,7 @@ public class ContactsService {
                 });
     }
 
+    @Override
     public Disposable getContactDetail(final RemoteServiceCallback callback, long id, final int requestCode) {
         return networkService.getContactDetail(id+"")
                 .subscribeOn(Schedulers.io())
@@ -78,6 +79,7 @@ public class ContactsService {
                 });
     }
 
+    @Override
     public Disposable editContactDetail(final RemoteServiceCallback callback, long id, final int requestCode, ContactDetailResponse contactDetailResponse) {
         return networkService.editContactDetail(id+"", contactDetailResponse)
                 .subscribeOn(Schedulers.io())
@@ -96,6 +98,7 @@ public class ContactsService {
                 });
     }
 
+    @Override
     public Disposable addContactDetail(final RemoteServiceCallback callback, final int requestCode, ContactDetailResponse contactDetail) {
         return networkService.addContact(contactDetail)
                 .subscribeOn(Schedulers.io())

@@ -30,11 +30,5 @@ public class AppModule {
         return mApplication;
     }
 
-    @Provides
-    @Singleton
-    IContactsRepository providesRepository() {
-        return ContactsRepository.getInstance(mApplication);
-    }
-
 
 }
