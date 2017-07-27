@@ -1,11 +1,14 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view.details;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import com.ahsanzaman.contactsapp.R;
 import com.ahsanzaman.contactsapp.di.module.ContactDetailsModule;
+import com.ahsanzaman.contactsapp.model.ContactDetailUIItem;
 import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseActivity;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
@@ -70,7 +74,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
 
         }
         setTitle(mContactDetailsPresenter.getName());
-        mContactDetailsAdapter = new ContactDetailsAdapter(this, new ArrayList<com.ahsanzaman.contactsapp.model.ContactDetail>());
+        mContactDetailsAdapter = new ContactDetailsAdapter(this, new ArrayList<ContactDetailUIItem>());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mDetailsRV.setLayoutManager(mLayoutManager);
         mDetailsRV.setAdapter(mContactDetailsAdapter);
@@ -137,14 +141,25 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     }
 
     @Override
-    public void bind(final ContactDetail contactDetail, List<com.ahsanzaman.contactsapp.model.ContactDetail> contactDetails) {
-        mContactDetailsAdapter.updateItems(contactDetails)
+    public void bind(final ContactDetail contactDetail, List<ContactDetailUIItem> contactDetailUIItems) {
+        mContactDetailsAdapter.updateItems(contactDetailUIItems)
                 .notifyDataSetChanged();
         mContactDetail = contactDetail;
     }
 
     @Override
+    public void onCallClicked() {
+        mContactDetailsPresenter.call();
+    }
+
+    @Override
     public void callNumber(String phoneNumber) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, CALL_PERMISSION_REQUEST);
+            }
+            return;
+        }
         try {
             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
             startActivity(intent);
@@ -154,20 +169,30 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     }
 
     @Override
-    public void dialContactPhone(final String phoneNumber) {
-        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+    public void onSMSClicked() {
+        mContactDetailsPresenter.sendSMS();
     }
 
     @Override
-    public void sendMail(String email){
+    public void sendSMS(String number) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+    }
+
+    @Override
+    public void onEmailClicked() {
+        mContactDetailsPresenter.sendEmail();
+    }
+
+    @Override
+    public void sendEmail(String email) {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto",email, null));
         startActivity(emailIntent);
     }
 
     @Override
-    public void sendMessage(String phoneNumber) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)));
+    public void dial(final String phoneNumber) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
     }
 
     @Override
@@ -177,9 +202,9 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
             case CALL_PERMISSION_REQUEST:
                 if(grantResults != null){
                     if(grantResults[0] ==  PackageManager.PERMISSION_GRANTED && mContactDetail !=null){
-                        callNumber(mContactDetail.getPhoneNumber());
+                        mContactDetailsPresenter.call();
                     } else if(mContactDetail !=null){
-                        dialContactPhone(mContactDetail.getPhoneNumber());
+                        mContactDetailsPresenter.dial();
                     }
                 }
         }

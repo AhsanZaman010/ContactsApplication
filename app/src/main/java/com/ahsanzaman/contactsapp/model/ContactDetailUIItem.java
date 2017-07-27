@@ -6,7 +6,7 @@ import android.view.View;
  * Created by Ahsan Zaman on 24-07-2017.
  */
 
-public class ContactDetail {
+public class ContactDetailUIItem {
 
     String title;
 

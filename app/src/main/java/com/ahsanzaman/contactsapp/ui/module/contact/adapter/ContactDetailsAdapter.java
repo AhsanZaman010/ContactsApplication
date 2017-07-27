@@ -2,7 +2,6 @@ package com.ahsanzaman.contactsapp.ui.module.contact.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ahsanzaman.contactsapp.R;
-import com.ahsanzaman.contactsapp.model.ContactDetail;
-import com.ahsanzaman.contactsapp.utils.ContactUtils;
+import com.ahsanzaman.contactsapp.model.ContactDetailUIItem;
 
 import java.util.List;
 
@@ -23,10 +21,10 @@ import butterknife.ButterKnife;
  */
 
 public class ContactDetailsAdapter extends RecyclerView.Adapter<ContactDetailsAdapter.ViewHolder> {
-    private List<ContactDetail> mItems;
+    private List<ContactDetailUIItem> mItems;
     private Context context;
 
-    public ContactDetailsAdapter(Context context, List<ContactDetail> data) {
+    public ContactDetailsAdapter(Context context, List<ContactDetailUIItem> data) {
         this.mItems = data;
         this.context = context;
     }
@@ -39,13 +37,13 @@ public class ContactDetailsAdapter extends RecyclerView.Adapter<ContactDetailsAd
         return new ContactDetailsAdapter.ViewHolder(view);
     }
 
-    public ContactDetailsAdapter updateItems(List<ContactDetail> data){
+    public ContactDetailsAdapter updateItems(List<ContactDetailUIItem> data){
         mItems.clear();
         mItems.addAll(data);
         return this;
     }
 
-    public ContactDetailsAdapter addItems(List<ContactDetail> data){
+    public ContactDetailsAdapter addItems(List<ContactDetailUIItem> data){
         mItems.addAll(data);
         return this;
     }
@@ -73,7 +71,7 @@ public class ContactDetailsAdapter extends RecyclerView.Adapter<ContactDetailsAd
 
 
     public interface OnItemClickListener {
-        void onClick(ContactDetail item);
+        void onClick(ContactDetailUIItem item);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,14 +93,14 @@ public class ContactDetailsAdapter extends RecyclerView.Adapter<ContactDetailsAd
         }
 
 
-        public void bind(final ContactDetail contactDetail, int position) {
-            if(contactDetail!=null){
-                mIconStart.setImageResource(contactDetail.getStartImageResource());
-                mIconEnd.setImageResource(contactDetail.getEndImageResource());
-                mTitleTV.setText(contactDetail.getTitle());
-                mDescriptionTV.setText(contactDetail.getDescription());
-                mItemView.setOnClickListener(contactDetail.getItemOnClickListener());
-                mIconEnd.setOnClickListener(contactDetail.getEndIconOnClickListener());
+        public void bind(final ContactDetailUIItem contactDetailUIItem, int position) {
+            if(contactDetailUIItem !=null){
+                mIconStart.setImageResource(contactDetailUIItem.getStartImageResource());
+                mIconEnd.setImageResource(contactDetailUIItem.getEndImageResource());
+                mTitleTV.setText(contactDetailUIItem.getTitle());
+                mDescriptionTV.setText(contactDetailUIItem.getDescription());
+                mItemView.setOnClickListener(contactDetailUIItem.getItemOnClickListener());
+                mIconEnd.setOnClickListener(contactDetailUIItem.getEndIconOnClickListener());
             }
         }
     }

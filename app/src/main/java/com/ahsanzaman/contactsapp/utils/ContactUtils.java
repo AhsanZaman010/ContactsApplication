@@ -1,12 +1,25 @@
 package com.ahsanzaman.contactsapp.utils;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.ahsanzaman.contactsapp.R;
 import com.ahsanzaman.contactsapp.model.Contact;
+import com.ahsanzaman.contactsapp.model.ContactDetailUIItem;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
+import com.ahsanzaman.contactsapp.ui.module.contact.presenter.ContactableInteractiveView;
+import com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsActivity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsActivity.CALL_PERMISSION_REQUEST;
 
 /**
  * Created by Accolite- on 7/22/2017.
@@ -62,6 +75,45 @@ public class ContactUtils {
         } else if(!TextUtils.isEmpty(contact.getLastName())){
             return (contact.getLastName().charAt(0) + "").toUpperCase();
         } else return "";
+    }
+
+    public static synchronized List<ContactDetailUIItem> getContactDetailsUIItems(final ContactDetail contactDetail, final ContactableInteractiveView contactableInteractiveView){
+        List<ContactDetailUIItem> contactDetailUIItems = new ArrayList<>();
+        if (contactDetail == null) {
+            if (!TextUtils.isEmpty(contactDetail.getPhoneNumber())) {
+                final ContactDetailUIItem contactDetailUIItem = new ContactDetailUIItem();
+                contactDetailUIItem.setTitle(contactDetail.getPhoneNumber());
+                contactDetailUIItem.setDescription("Mobile");
+                contactDetailUIItem.setEndImageResource(R.drawable.ic_message);
+                contactDetailUIItem.setStartImageResource(R.drawable.ic_call_blue);
+                contactDetailUIItem.setEndIconOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        contactableInteractiveView.onSMSClicked();
+                    }
+                });
+                contactDetailUIItem.setItemOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        contactableInteractiveView.onCallClicked();
+                        }
+                });
+                contactDetailUIItems.add(contactDetailUIItem);
+            }
+            if (!TextUtils.isEmpty(contactDetail.getPhoneNumber())) {
+                final ContactDetailUIItem contactDetailUIItem = new ContactDetailUIItem();
+                contactDetailUIItem.setTitle(contactDetail.getPhoneNumber());
+                contactDetailUIItem.setDescription("Other");
+                contactDetailUIItem.setStartImageResource(R.drawable.ic_email_blue);
+                contactDetailUIItem.setItemOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        contactableInteractiveView.onEmailClicked();}
+                });
+                contactDetailUIItems.add(contactDetailUIItem);
+            }
+        }
+        return contactDetailUIItems;
     }
 
 }
