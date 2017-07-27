@@ -1,9 +1,6 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view.details;
 
-import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.ContactDetail;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
-import com.ahsanzaman.contactsapp.model.response.ContactResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 
 import java.util.List;
@@ -14,7 +11,7 @@ import java.util.List;
 
 public interface ContactDetailsView extends BaseView {
 
-    void bind(ContactDetailResponse contactDetailResponse, List<ContactDetail> contactDetails);
+    void bind(ContactDetail contactDetail, List<com.ahsanzaman.contactsapp.model.ContactDetail> contactDetails);
 
     void callNumber(String phoneNumber);
 

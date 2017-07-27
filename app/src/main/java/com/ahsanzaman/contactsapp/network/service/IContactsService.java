@@ -1,6 +1,6 @@
 package com.ahsanzaman.contactsapp.network.service;
 
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 
 import io.reactivex.disposables.Disposable;
@@ -14,7 +14,7 @@ public interface IContactsService {
 
     Disposable getContactDetail(RemoteServiceCallback callback, long id, int requestCode);
 
-    Disposable editContactDetail(RemoteServiceCallback callback, long id, int requestCode, ContactDetailResponse contactDetailResponse);
+    Disposable editContactDetail(RemoteServiceCallback callback, long id, int requestCode, ContactDetail contactDetail);
 
-    Disposable addContactDetail(RemoteServiceCallback callback, int requestCode, ContactDetailResponse contactDetail);
+    Disposable addContactDetail(RemoteServiceCallback callback, int requestCode, ContactDetail contactDetail);
 }

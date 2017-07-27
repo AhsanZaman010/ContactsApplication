@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Accolite- on 7/26/2017.
  */
 
-public class ResponeObject {
+public class ResponseObject {
 
     @SerializedName("error")
     @Expose

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
@@ -23,16 +23,16 @@ public class EditContactPresenter extends BasePresenter{
     private final EditContactView mEditContactView;
     private final IContactsRepository mContactsRepository;
     private final Contact mContact;
-    private final ContactDetailResponse mContactDetailResponse;
+    private final ContactDetail mContactDetail;
 
     @Inject
-    public EditContactPresenter(IContactsService contactsService, Context activity, IContactsRepository contactsRepository, ContactDetailResponse contactDetailResponse) {
+    public EditContactPresenter(IContactsService contactsService, Context activity, IContactsRepository contactsRepository, ContactDetail contactDetail) {
         super((BaseView) activity);
         mContactsService = contactsService;
         mEditContactView = (EditContactView) activity;
         mContactsRepository = contactsRepository;
-        mContact = contactsRepository.getLocalRepository().getContactById(contactDetailResponse.getId());
-        mContactDetailResponse = contactDetailResponse;
+        mContact = contactsRepository.getLocalRepository().getContactById(contactDetail.getId());
+        mContactDetail = contactDetail;
     }
 
     public void onSave() {
@@ -43,14 +43,14 @@ public class EditContactPresenter extends BasePresenter{
     @Override
     public void onSuccess(Object responseObject, int requestCode) {
         super.onSuccess(responseObject, requestCode);
-        if(responseObject instanceof ContactDetailResponse){
-            ContactDetailResponse contactDetailResponse = (ContactDetailResponse) responseObject;
-            mContact.setFirstName(contactDetailResponse.getFirstName());
-            mContact.setLastName(contactDetailResponse.getLastName());
-            mContact.setFavorite(contactDetailResponse.isFavorite());
-            mContact.setProfilePic(contactDetailResponse.getProfilePic());
+        if(responseObject instanceof ContactDetail){
+            ContactDetail contactDetail = (ContactDetail) responseObject;
+            mContact.setFirstName(contactDetail.getFirstName());
+            mContact.setLastName(contactDetail.getLastName());
+            mContact.setFavorite(contactDetail.isFavorite());
+            mContact.setProfilePic(contactDetail.getProfilePic());
             mContactsRepository.getLocalRepository().updateContact(mContact);
-            mEditContactView.finishOnSuccess(contactDetailResponse);
+            mEditContactView.finishOnSuccess(contactDetail);
         } else {
          mEditContactView.showError("");
         }

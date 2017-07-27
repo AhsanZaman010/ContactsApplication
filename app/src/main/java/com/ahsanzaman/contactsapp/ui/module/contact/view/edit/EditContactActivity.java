@@ -7,9 +7,8 @@ import android.os.Looper;
 import android.widget.Toast;
 
 import com.ahsanzaman.contactsapp.R;
-import com.ahsanzaman.contactsapp.di.module.ContactsModule;
 import com.ahsanzaman.contactsapp.di.module.EditContactModule;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.ContactsApplication;
 import com.ahsanzaman.contactsapp.ui.module.contact.presenter.edit.EditContactPresenter;
@@ -26,7 +25,7 @@ public class EditContactActivity extends EditableContactActivity implements Edit
     private static final String CONTACT_DETAIL = "Contact detail";
     @Inject
     EditContactPresenter mPresenter;
-    private ContactDetailResponse mContactDetailResponse;
+    private ContactDetail mContactDetail;
 
     @Override
     protected void onValidatedSave() {
@@ -53,9 +52,9 @@ public class EditContactActivity extends EditableContactActivity implements Edit
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.edit_contact_title));
         if (getIntent() != null) {
-            mContactDetailResponse = getIntent().getParcelableExtra(CONTACT_DETAIL);
+            mContactDetail = getIntent().getParcelableExtra(CONTACT_DETAIL);
         }
-        if (mContactDetailResponse == null) {
+        if (mContactDetail == null) {
             Toast.makeText(this, R.string.contact_not_found, Toast.LENGTH_SHORT);
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -64,26 +63,26 @@ public class EditContactActivity extends EditableContactActivity implements Edit
                 }
             }, 2000);
         } else {
-            ((ContactsApplication) getApplicationContext()).getDeps().plus(new EditContactModule(this, mContactDetailResponse)).inject(this);
-            bind(mContactDetailResponse);
+            ((ContactsApplication) getApplicationContext()).getDeps().plus(new EditContactModule(this, mContactDetail)).inject(this);
+            bind(mContactDetail);
         }
     }
 
     @Override
-    public void bindToContact(ContactDetailResponse contactDetailResponse) {
-        bind(mContactDetailResponse);
+    public void bindToContact(ContactDetail contactDetail) {
+        bind(mContactDetail);
     }
 
     @Override
-    public ContactDetailResponse getContactDetail() {
+    public ContactDetail getContactDetail() {
         return getContactDetailResponse();
     }
 
     @Override
-    public void finishOnSuccess(ContactDetailResponse contactDetailResponse) {
+    public void finishOnSuccess(ContactDetail contactDetail) {
         if(getIntent()!=null) {
             setResult(RESULT_OK);
-            getIntent().putExtra(CONTACT_DETAIL, contactDetailResponse);
+            getIntent().putExtra(CONTACT_DETAIL, contactDetail);
         }
         finish();
     }

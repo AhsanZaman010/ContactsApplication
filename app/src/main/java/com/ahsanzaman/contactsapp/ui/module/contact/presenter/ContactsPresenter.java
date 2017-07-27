@@ -9,6 +9,7 @@ import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 import com.ahsanzaman.contactsapp.ui.module.contact.view.ContactsView;
+import com.ahsanzaman.contactsapp.utils.CollectionUtils;
 import com.ahsanzaman.contactsapp.utils.ContactUtils;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 
 public class ContactsPresenter extends BasePresenter {
 
-    private static final int CONTACTS_REQUEST_CODE = 101;
+    public static final int CONTACTS_REQUEST_CODE = 101;
     private final String TAG = getClass().getSimpleName();
 
     private final ContactsView mContactsView;
@@ -37,7 +38,9 @@ public class ContactsPresenter extends BasePresenter {
     }
 
     public void loadContacts(boolean forceUpdate){
+        mContactsView.hideNoDataFound();
         mContactsView.showLoading();
+        mContactsView.hideNoDataFound();
         if(forceUpdate){
             mContactsRepository.getLocalRepository().clearContacts();
         }
@@ -54,14 +57,24 @@ public class ContactsPresenter extends BasePresenter {
     }
 
     public void onItemClick(Contact item) {
-
+        mContactsView.showContactDetails(item);
     }
 
     @Override
     public void onSuccess(Object responseObject, int requestCode) {
         super.onSuccess(responseObject, requestCode);
+        mContactsView.showAddContactButton();
         List<Contact> contactList = (List<Contact>) responseObject;
-        mContactsRepository.getLocalRepository().setAllContacts(contactList);
-        showContacts(contactList);
+        if(!CollectionUtils.isEmpty(contactList)) {
+            mContactsRepository.getLocalRepository().setAllContacts(contactList);
+            showContacts(contactList);
+        } else {
+            mContactsView.hideLoading();
+            mContactsView.showNoDataFound();
+        }
+    }
+
+    public void addContact() {
+        mContactsView.openAddContactScreen();
     }
 }

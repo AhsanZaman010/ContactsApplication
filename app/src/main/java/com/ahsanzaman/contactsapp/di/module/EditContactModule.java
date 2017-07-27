@@ -3,22 +3,24 @@ package com.ahsanzaman.contactsapp.di.module;
 import android.app.Activity;
 import android.content.Context;
 
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 
+import dagger.Module;
 import dagger.Provides;
 
 /**
  * Created by Accolite- on 7/25/2017.
  */
 
+@Module
 public class EditContactModule {
 
     private final Activity mActivity;
-    private final ContactDetailResponse mContactDetailResponse;
+    private final ContactDetail mContactDetail;
 
-    public EditContactModule(Activity activity, ContactDetailResponse contactDetailResponse) {
+    public EditContactModule(Activity activity, ContactDetail contactDetail) {
         mActivity = activity;
-        mContactDetailResponse = contactDetailResponse;
+        mContactDetail = contactDetail;
     }
 
     @Provides
@@ -27,8 +29,8 @@ public class EditContactModule {
     }
 
     @Provides
-    ContactDetailResponse providesResponse() {
-        return mContactDetailResponse;
+    ContactDetail providesResponse() {
+        return mContactDetail;
     }
 
 }

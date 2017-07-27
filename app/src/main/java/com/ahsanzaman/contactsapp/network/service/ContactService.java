@@ -1,10 +1,12 @@
 package com.ahsanzaman.contactsapp.network.service;
 
 import android.accounts.NetworkErrorException;
+import android.text.TextUtils;
 
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.model.response.ContactResponse;
+import com.ahsanzaman.contactsapp.model.response.ResponseObject;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 
 import java.util.ArrayList;
@@ -64,6 +66,15 @@ public class ContactService implements IContactsService {
     public Disposable getContactDetail(final RemoteServiceCallback callback, long id, final int requestCode) {
         return networkService.getContactDetail(id+"")
                 .subscribeOn(Schedulers.io())
+                .map(new Function<ContactDetail, ContactDetail>() {
+                    @Override
+                    public ContactDetail apply(ContactDetail contactDetail) throws Exception {
+                        if(!validateResponse(contactDetail)){
+                            throw new NetworkErrorException(null!= contactDetail ? contactDetail.getError():"");
+                        }
+                        return contactDetail;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(new Consumer<Throwable>() {
                     @Override
@@ -71,18 +82,27 @@ public class ContactService implements IContactsService {
                         callback.onError(new NetworkErrorException(throwable), requestCode);
                     }
                 })
-                .subscribe(new Consumer<ContactDetailResponse>() {
+                .subscribe(new Consumer<ContactDetail>() {
                     @Override
-                    public void accept(ContactDetailResponse contactDetailResponse) throws Exception {
-                        callback.onSuccess(contactDetailResponse, requestCode);
+                    public void accept(ContactDetail contactDetail) throws Exception {
+                        callback.onSuccess(contactDetail, requestCode);
                     }
                 });
     }
 
     @Override
-    public Disposable editContactDetail(final RemoteServiceCallback callback, long id, final int requestCode, ContactDetailResponse contactDetailResponse) {
-        return networkService.editContactDetail(id+"", contactDetailResponse)
+    public Disposable editContactDetail(final RemoteServiceCallback callback, long id, final int requestCode, ContactDetail contactDetail) {
+        return networkService.editContactDetail(id+"", contactDetail)
                 .subscribeOn(Schedulers.io())
+                .map(new Function<ContactDetail, ContactDetail>() {
+                    @Override
+                    public ContactDetail apply(ContactDetail contactDetail) throws Exception {
+                        if(!validateResponse(contactDetail)){
+                            throw new NetworkErrorException(null!= contactDetail ? contactDetail.getError():"");
+                        }
+                        return contactDetail;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(new Consumer<Throwable>() {
                     @Override
@@ -90,18 +110,27 @@ public class ContactService implements IContactsService {
                         callback.onError(new NetworkErrorException(throwable), requestCode);
                     }
                 })
-                .subscribe(new Consumer<ContactDetailResponse>() {
+                .subscribe(new Consumer<ContactDetail>() {
                     @Override
-                    public void accept(ContactDetailResponse contactDetailResponse) throws Exception {
-                        callback.onSuccess(contactDetailResponse, requestCode);
+                    public void accept(ContactDetail contactDetail) throws Exception {
+                        callback.onSuccess(contactDetail, requestCode);
                     }
                 });
     }
 
     @Override
-    public Disposable addContactDetail(final RemoteServiceCallback callback, final int requestCode, ContactDetailResponse contactDetail) {
+    public Disposable addContactDetail(final RemoteServiceCallback callback, final int requestCode, ContactDetail contactDetail) {
         return networkService.addContact(contactDetail)
                 .subscribeOn(Schedulers.io())
+                .map(new Function<ContactDetail, ContactDetail>() {
+                    @Override
+                    public ContactDetail apply(ContactDetail contactDetail) throws Exception {
+                        if(!validateResponse(contactDetail)){
+                            throw new NetworkErrorException(null!= contactDetail ? contactDetail.getError():"");
+                        }
+                        return contactDetail;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(new Consumer<Throwable>() {
                     @Override
@@ -109,11 +138,18 @@ public class ContactService implements IContactsService {
                         callback.onError(new NetworkErrorException(throwable), requestCode);
                     }
                 })
-                .subscribe(new Consumer<ContactDetailResponse>() {
+                .subscribe(new Consumer<ContactDetail>() {
                     @Override
-                    public void accept(ContactDetailResponse contactDetailResponse) throws Exception {
-                        callback.onSuccess(contactDetailResponse, requestCode);
+                    public void accept(ContactDetail contactDetail) throws Exception {
+                        callback.onSuccess(contactDetail, requestCode);
                     }
                 });
+    }
+
+    private boolean validateResponse(ResponseObject responseObject) {
+        if(null != responseObject && TextUtils.isEmpty(responseObject.getError())){
+            return true;
+        }
+        return false;
     }
 }

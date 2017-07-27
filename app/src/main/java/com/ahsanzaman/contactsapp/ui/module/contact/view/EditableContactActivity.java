@@ -1,7 +1,6 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view;
 
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -11,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.ahsanzaman.contactsapp.R;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseActivity;
 
 import butterknife.BindView;
@@ -27,9 +26,9 @@ public abstract class EditableContactActivity extends BaseActivity {
     EditText mEmailET;
     @BindView(R.id.name_til)
     TextInputLayout mNameTIL;
-    @BindView(R.id.phone_et)
+    @BindView(R.id.phone_til)
     TextInputLayout mPhoneTIL;
-    @BindView(R.id.email_et)
+    @BindView(R.id.email_til)
     TextInputLayout mEmailTIL;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -95,8 +94,8 @@ public abstract class EditableContactActivity extends BaseActivity {
     private boolean isEmailValid(){
         String email = mEmailET.getText().toString();
         if(TextUtils.isEmpty(email) || !isValidMail(email)){
-            mNameTIL.setErrorEnabled(true);
-            mNameTIL.setError("Please enter a valid email");
+            mEmailTIL.setErrorEnabled(true);
+            mEmailTIL.setError("Please enter a valid email");
             return false;
         }
         return true;
@@ -131,21 +130,21 @@ public abstract class EditableContactActivity extends BaseActivity {
         }
     }
 
-    protected void bind(ContactDetailResponse contactDetailResponse){
-        if(contactDetailResponse!=null) {
-            mNameET.setText(contactDetailResponse.getFirstName() + " " + contactDetailResponse.getLastName());
-            mPhoneET.setText(contactDetailResponse.getPhoneNumber());
-            mEmailET.setText(contactDetailResponse.getEmail());
+    protected void bind(ContactDetail contactDetail){
+        if(contactDetail !=null) {
+            mNameET.setText(contactDetail.getFirstName() + " " + contactDetail.getLastName());
+            mPhoneET.setText(contactDetail.getPhoneNumber());
+            mEmailET.setText(contactDetail.getEmail());
         }
     }
 
-    protected ContactDetailResponse getContactDetailResponse(){
-        ContactDetailResponse contactDetailResponse = new ContactDetailResponse();
+    protected ContactDetail getContactDetailResponse(){
+        ContactDetail contactDetail = new ContactDetail();
         String [] names = mNameET.getText().toString().split(" ");
-        contactDetailResponse.setFirstName(names[0]);
-        contactDetailResponse.setLastName(names[1]);
-        contactDetailResponse.setPhoneNumber(mPhoneET.getText().toString());
-        contactDetailResponse.setEmail(mEmailET.getText().toString());
-        return contactDetailResponse;
+        contactDetail.setFirstName(names[0]);
+        contactDetail.setLastName(names[1]);
+        contactDetail.setPhoneNumber(mPhoneET.getText().toString());
+        contactDetail.setEmail(mEmailET.getText().toString());
+        return contactDetail;
     }
 }

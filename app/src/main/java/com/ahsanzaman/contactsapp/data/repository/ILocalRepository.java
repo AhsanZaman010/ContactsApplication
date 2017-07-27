@@ -18,7 +18,7 @@ public interface ILocalRepository {
 
     void clearContacts();
 
-    List<Contact> setAllContacts(List<Contact> contacts);
+    void setAllContacts(List<Contact> contacts);
 
     void updateContact(Contact contact);
 

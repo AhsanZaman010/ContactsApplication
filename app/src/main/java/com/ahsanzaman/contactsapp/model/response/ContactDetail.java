@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Ahsan Zaman on 24-07-2017.
  */
 
-public class ContactDetailResponse extends ResponeObject implements Parcelable{
+public class ContactDetail extends ResponseObject implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -40,11 +40,11 @@ public class ContactDetailResponse extends ResponeObject implements Parcelable{
     @Expose
     private String updatedAt;
 
-    public ContactDetailResponse(){
+    public ContactDetail(){
 
     }
 
-    protected ContactDetailResponse(Parcel in) {
+    protected ContactDetail(Parcel in) {
         id = in.readLong();
         firstName = in.readString();
         lastName = in.readString();
@@ -74,15 +74,15 @@ public class ContactDetailResponse extends ResponeObject implements Parcelable{
         return 0;
     }
 
-    public static final Creator<ContactDetailResponse> CREATOR = new Creator<ContactDetailResponse>() {
+    public static final Creator<ContactDetail> CREATOR = new Creator<ContactDetail>() {
         @Override
-        public ContactDetailResponse createFromParcel(Parcel in) {
-            return new ContactDetailResponse(in);
+        public ContactDetail createFromParcel(Parcel in) {
+            return new ContactDetail(in);
         }
 
         @Override
-        public ContactDetailResponse[] newArray(int size) {
-            return new ContactDetailResponse[size];
+        public ContactDetail[] newArray(int size) {
+            return new ContactDetail[size];
         }
     };
 

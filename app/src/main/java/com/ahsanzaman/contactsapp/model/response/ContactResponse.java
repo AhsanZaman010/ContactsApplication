@@ -3,13 +3,11 @@ package com.ahsanzaman.contactsapp.model.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-
 /**
  * Created by Accolite- on 7/22/2017.
  */
 
-public class ContactResponse extends ResponeObject {
+public class ContactResponse extends ResponseObject {
 
     @SerializedName("id")
     @Expose

@@ -3,7 +3,7 @@ package com.ahsanzaman.contactsapp.data.repository;
 import android.support.annotation.NonNull;
 
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.utils.CollectionUtils;
@@ -50,12 +50,12 @@ public class ContactsRepository implements IContactsRepository{
     }
 
     @Override
-    public Disposable editContactDetail(RemoteServiceCallback callback, long id, int requestCode, ContactDetailResponse contactDetailResponse) {
-        return mContactsService.editContactDetail(callback, id, requestCode, contactDetailResponse);
+    public Disposable editContactDetail(RemoteServiceCallback callback, long id, int requestCode, ContactDetail contactDetail) {
+        return mContactsService.editContactDetail(callback, id, requestCode, contactDetail);
     }
 
     @Override
-    public Disposable addContactDetail(RemoteServiceCallback callback, int requestCode, ContactDetailResponse contactDetail) {
+    public Disposable addContactDetail(RemoteServiceCallback callback, int requestCode, ContactDetail contactDetail) {
         return mContactsService.addContactDetail(callback, requestCode, contactDetail);
     }
 

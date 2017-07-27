@@ -1,10 +1,9 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.presenter.add;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
@@ -39,8 +38,8 @@ public class AddContactPresenter extends BasePresenter {
     @Override
     public void onSuccess(Object responseObject, int requestCode) {
         super.onSuccess(responseObject, requestCode);
-        if(responseObject instanceof ContactDetailResponse && TextUtils.isEmpty(((ContactDetailResponse)responseObject).getStatus()) && TextUtils.isEmpty(((ContactDetailResponse)responseObject).getError())){
-            mContactsRepository.clearContacts();
+        if(responseObject instanceof ContactDetail){
+            mContactsRepository.getLocalRepository().clearContacts();
             mContactsView.finishOnSuccess();
         } else {
             mContactsView.showError("");

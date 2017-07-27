@@ -12,8 +12,7 @@ import android.view.View;
 import com.ahsanzaman.contactsapp.R;
 import com.ahsanzaman.contactsapp.data.repository.IContactsRepository;
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.model.ContactDetail;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.network.service.IContactsService;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
@@ -35,28 +34,26 @@ import static com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactD
 public class ContactDetailsPresenter extends BasePresenter implements RemoteServiceCallback{
 
     private static final int CONTACT_DETAIL_REQUEST_CODE = 101;
-    private final IContactsService mContactsService;
     private final ContactDetailsView mContactDetailsView;
     private final Contact mContact;
     private final IContactsRepository mContactRepository;
-    private ContactDetailResponse mContactDetailResponse;
+    private ContactDetail mContactDetail;
 
     @Inject
-    public ContactDetailsPresenter(IContactsService contactsService, Context context, Long contactID, IContactsRepository contactsRepository) {
+    public ContactDetailsPresenter(Context context, Long contactID, IContactsRepository contactsRepository) {
         super((BaseView) context);
-        mContactsService = contactsService;
         mContactDetailsView = (ContactDetailsView) context;
-        mContact = contactsRepository.getContactById(contactID);
+        mContact = contactsRepository.getLocalRepository().getContactById(contactID);
         mContactRepository = contactsRepository;
     }
 
     public void getContactDetails(){
-        mCompositeDisposable.add(mContactsService.getContactDetail(this, mContact.getId(), CONTACT_DETAIL_REQUEST_CODE));
+        mCompositeDisposable.add(mContactRepository.getContactDetail(this, mContact.getId(), CONTACT_DETAIL_REQUEST_CODE));
     }
 
     public boolean toggleFavourite() {
         mContact.setFavorite(!mContact.isFavorite());
-        mContactRepository.updateContact(mContact);
+        mContactRepository.getLocalRepository().updateContact(mContact);
         return mContact.isFavorite();
     }
 
@@ -73,12 +70,12 @@ public class ContactDetailsPresenter extends BasePresenter implements RemoteServ
         return "";
     }
 
-    private void setResponse(final ContactDetailResponse contactDetailResponse){
-        mContactDetailResponse = contactDetailResponse;
+    private void setResponse(final ContactDetail contactDetailResponse){
+        mContactDetail = contactDetailResponse;
         if (contactDetailResponse == null) {
-            List<ContactDetail> contactDetails = new ArrayList<>();
+            List<com.ahsanzaman.contactsapp.model.ContactDetail> contactDetails = new ArrayList<>();
             if (!TextUtils.isEmpty(contactDetailResponse.getPhoneNumber())) {
-                final ContactDetail contactDetail = new ContactDetail();
+                final com.ahsanzaman.contactsapp.model.ContactDetail contactDetail = new com.ahsanzaman.contactsapp.model.ContactDetail();
                 contactDetail.setTitle(contactDetailResponse.getPhoneNumber());
                 contactDetail.setDescription("Mobile");
                 contactDetail.setEndImageResource(R.drawable.ic_message);
@@ -103,7 +100,7 @@ public class ContactDetailsPresenter extends BasePresenter implements RemoteServ
                 contactDetails.add(contactDetail);
             }
             if (!TextUtils.isEmpty(contactDetailResponse.getPhoneNumber())) {
-                final ContactDetail contactDetail = new ContactDetail();
+                final com.ahsanzaman.contactsapp.model.ContactDetail contactDetail = new com.ahsanzaman.contactsapp.model.ContactDetail();
                 contactDetail.setTitle(contactDetailResponse.getPhoneNumber());
                 contactDetail.setDescription("Other");
                 contactDetail.setStartImageResource(R.drawable.ic_email_blue);
@@ -120,10 +117,9 @@ public class ContactDetailsPresenter extends BasePresenter implements RemoteServ
 
     @Override
     public void onSuccess(Object responseObject, int requestCode) {
-        ContactDetailResponse contactDetailResponse = (ContactDetailResponse) responseObject;
-        if(contactDetailResponse==null || !TextUtils.isEmpty(contactDetailResponse.getError())){
-            onError(new NetworkErrorException(contactDetailResponse.getStatus(), new Throwable(contactDetailResponse.getError())), requestCode);
-        }
+        ContactDetail contactDetail = (ContactDetail) responseObject;
+        mContactDetailsView.hideLoading();
+        setResponse(contactDetail);
     }
 
     @Override

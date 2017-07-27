@@ -17,9 +17,7 @@ import android.widget.Toast;
 
 import com.ahsanzaman.contactsapp.R;
 import com.ahsanzaman.contactsapp.di.module.ContactDetailsModule;
-import com.ahsanzaman.contactsapp.model.ContactDetail;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
-import com.ahsanzaman.contactsapp.network.ResponseCodes;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseActivity;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.ContactsApplication;
@@ -49,7 +47,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     @BindView(R.id.contact_details_rv)
     RecyclerView mDetailsRV;
     private ContactDetailsAdapter mContactDetailsAdapter;
-    private ContactDetailResponse mContactDetailResponse;
+    private ContactDetail mContactDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
 
         }
         setTitle(mContactDetailsPresenter.getName());
-        mContactDetailsAdapter = new ContactDetailsAdapter(this, new ArrayList<ContactDetail>());
+        mContactDetailsAdapter = new ContactDetailsAdapter(this, new ArrayList<com.ahsanzaman.contactsapp.model.ContactDetail>());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mDetailsRV.setLayoutManager(mLayoutManager);
         mDetailsRV.setAdapter(mContactDetailsAdapter);
@@ -139,10 +137,10 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     }
 
     @Override
-    public void bind(final ContactDetailResponse contactDetailResponse, List<ContactDetail> contactDetails) {
+    public void bind(final ContactDetail contactDetail, List<com.ahsanzaman.contactsapp.model.ContactDetail> contactDetails) {
         mContactDetailsAdapter.updateItems(contactDetails)
                 .notifyDataSetChanged();
-        mContactDetailResponse =contactDetailResponse;
+        mContactDetail = contactDetail;
     }
 
     @Override
@@ -178,10 +176,10 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
         switch (requestCode){
             case CALL_PERMISSION_REQUEST:
                 if(grantResults != null){
-                    if(grantResults[0] ==  PackageManager.PERMISSION_GRANTED && mContactDetailResponse!=null){
-                        callNumber(mContactDetailResponse.getPhoneNumber());
-                    } else if(mContactDetailResponse!=null){
-                        dialContactPhone(mContactDetailResponse.getPhoneNumber());
+                    if(grantResults[0] ==  PackageManager.PERMISSION_GRANTED && mContactDetail !=null){
+                        callNumber(mContactDetail.getPhoneNumber());
+                    } else if(mContactDetail !=null){
+                        dialContactPhone(mContactDetail.getPhoneNumber());
                     }
                 }
         }

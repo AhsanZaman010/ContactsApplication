@@ -1,6 +1,6 @@
 package com.ahsanzaman.contactsapp.network.service;
 
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.model.response.ContactResponse;
 
 import java.util.List;
@@ -22,12 +22,12 @@ public interface NetworkService {
     Observable<List<ContactResponse>> getContactList();
 
     @GET("/contacts/{id}.json")
-    Observable<ContactDetailResponse> getContactDetail(@Path("id") String id);
+    Observable<ContactDetail> getContactDetail(@Path("id") String id);
 
     @PUT("/contacts/{id}.json")
-    Observable<ContactDetailResponse> editContactDetail(@Path("id") String id, @Body ContactDetailResponse contactDetailResponse);
+    Observable<ContactDetail> editContactDetail(@Path("id") String id, @Body ContactDetail contactDetail);
 
     @POST("/contacts.json")
-    Observable<ContactDetailResponse> addContact(@Body ContactDetailResponse contactDetailResponse);
+    Observable<ContactDetail> addContact(@Body ContactDetail contactDetail);
 
 }

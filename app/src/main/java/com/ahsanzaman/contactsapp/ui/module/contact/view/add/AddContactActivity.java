@@ -2,14 +2,10 @@ package com.ahsanzaman.contactsapp.ui.module.contact.view.add;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.Toast;
 
 import com.ahsanzaman.contactsapp.R;
 import com.ahsanzaman.contactsapp.di.module.ContactsModule;
-import com.ahsanzaman.contactsapp.di.module.EditContactModule;
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BasePresenter;
 import com.ahsanzaman.contactsapp.ui.module.base.ContactsApplication;
 import com.ahsanzaman.contactsapp.ui.module.contact.presenter.add.AddContactPresenter;
@@ -54,7 +50,7 @@ public class AddContactActivity extends EditableContactActivity implements AddCo
     }
 
     @Override
-    public ContactDetailResponse getContactDetail() {
+    public ContactDetail getContactDetail() {
         return getContactDetailResponse();
     }
 

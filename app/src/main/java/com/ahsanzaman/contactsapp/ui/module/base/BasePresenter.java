@@ -1,9 +1,10 @@
 package com.ahsanzaman.contactsapp.ui.module.base;
 
 import android.accounts.NetworkErrorException;
+import android.text.TextUtils;
 import android.util.Log;
 
-import com.ahsanzaman.contactsapp.model.response.ResponeObject;
+import com.ahsanzaman.contactsapp.model.response.ResponseObject;
 import com.ahsanzaman.contactsapp.network.callback.RemoteServiceCallback;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -34,10 +35,7 @@ public class BasePresenter implements RemoteServiceCallback {
 
     @Override
     public void onSuccess(Object responseObject, int requestCode) {
-        if(responseObject instanceof ResponeObject){
-            mView.hideLoading();
-            mView.showError(((ResponeObject) responseObject).getStatus());
-        }
+
     }
 
     @Override

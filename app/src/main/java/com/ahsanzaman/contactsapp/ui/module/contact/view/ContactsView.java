@@ -11,4 +11,16 @@ import java.util.List;
 
 public interface ContactsView extends BaseView {
     void updateContacts(List<Contact> contactList);
+
+    void showAddContactButton();
+
+    void hideAddContactButton();
+
+    void showNoDataFound();
+
+    void hideNoDataFound();
+
+    void showContactDetails(Contact item);
+
+    void openAddContactScreen();
 }

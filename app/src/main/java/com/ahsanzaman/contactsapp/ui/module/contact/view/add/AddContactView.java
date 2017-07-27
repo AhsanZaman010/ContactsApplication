@@ -1,6 +1,6 @@
 package com.ahsanzaman.contactsapp.ui.module.contact.view.add;
 
-import com.ahsanzaman.contactsapp.model.response.ContactDetailResponse;
+import com.ahsanzaman.contactsapp.model.response.ContactDetail;
 import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 
 /**
@@ -9,7 +9,7 @@ import com.ahsanzaman.contactsapp.ui.module.base.BaseView;
 
 public interface AddContactView extends BaseView {
 
-    ContactDetailResponse getContactDetail();
+    ContactDetail getContactDetail();
 
     void finishOnSuccess();
 }

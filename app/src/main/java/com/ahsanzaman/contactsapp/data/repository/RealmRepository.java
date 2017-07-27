@@ -1,10 +1,8 @@
 package com.ahsanzaman.contactsapp.data.repository;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
 import com.ahsanzaman.contactsapp.model.Contact;
-import com.ahsanzaman.contactsapp.network.service.IContactsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,13 +65,12 @@ public class RealmRepository implements ILocalRepository {
 
 
     @Override
-    public List<Contact> setAllContacts(List<Contact> contacts) {
+    public void setAllContacts(List<Contact> contacts) {
         clearContacts();
         Realm realm = Realm.getInstance(mApplication);
         realm.beginTransaction();
         realm.copyToRealm(contacts);
         realm.commitTransaction();
-        return contacts;
     }
 
     @Override
