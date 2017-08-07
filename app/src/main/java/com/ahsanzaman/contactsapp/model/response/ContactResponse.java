@@ -28,6 +28,18 @@ public class ContactResponse extends ResponseObject {
     @Expose
     private String url;
 
+    public ContactResponse(long id, String firstName, String lastName, String profilePic, boolean favorite, String url) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profilePic = profilePic;
+        this.favorite = favorite;
+        this.url = url;
+    }
+
+    public ContactResponse() {
+    }
+
     public long getId() {
         return id;
     }

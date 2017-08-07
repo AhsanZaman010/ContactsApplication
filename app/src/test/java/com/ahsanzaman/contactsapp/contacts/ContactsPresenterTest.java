@@ -1,4 +1,4 @@
-package com.ahsanzaman.contactsapp;
+package com.ahsanzaman.contactsapp.contacts;
 
 import android.util.Log;
 

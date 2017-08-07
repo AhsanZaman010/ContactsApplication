@@ -17,6 +17,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by Accolite- on 7/23/2017.
  */
@@ -24,27 +26,53 @@ import javax.inject.Inject;
 public class ContactDetailsPresenter extends BasePresenter implements RemoteServiceCallback{
 
     private static final int CONTACT_DETAIL_REQUEST_CODE = 101;
+    public static final int TOGGLE_FAVOURITE_API = 102;
     private final ContactDetailsView mContactDetailsView;
-    private final Contact mContact;
+    private final long mContactID;
+    private Contact mContact;
     private final IContactsRepository mContactRepository;
     private ContactDetail mContactDetail;
 
     @Inject
-    public ContactDetailsPresenter(Context context, Long contactID, IContactsRepository contactsRepository) {
-        super((BaseView) context);
-        mContactDetailsView = (ContactDetailsView) context;
-        mContact = contactsRepository.getLocalRepository().getContactById(contactID);
+    public ContactDetailsPresenter(ContactDetailsView contactDetailsView, Long contactID, IContactsRepository contactsRepository) {
+        super(contactDetailsView);
+        mContactDetailsView = contactDetailsView;
         mContactRepository = contactsRepository;
+        mContactID = contactID;
+        getContact();
+    }
+
+    public void getContact(){
+        if(mContactID < 1){
+            mContactDetailsView.showInvalidContactAndExit();
+        }
+        mContact = mContactRepository.getLocalRepository().getContactById(mContactID);
+    }
+
+    public void reloadAPI(int requestCode){
+        switch (requestCode){
+            case CONTACT_DETAIL_REQUEST_CODE:
+                getContactDetails();
+                break;
+            case TOGGLE_FAVOURITE_API:
+                toggleFavourite();
+                break;
+        }
     }
 
     public void getContactDetails(){
-        mCompositeDisposable.add(mContactRepository.getContactDetail(this, mContact.getId(), CONTACT_DETAIL_REQUEST_CODE));
+        Disposable disposable = mContactRepository.getContactDetail(this, mContact.getId(), CONTACT_DETAIL_REQUEST_CODE);
+        if(mCompositeDisposable!=null) {
+            mCompositeDisposable.add(disposable);
+        }
     }
 
-    public boolean toggleFavourite() {
-        mContact.setFavorite(!mContact.isFavorite());
-        mContactRepository.getLocalRepository().updateContact(mContact);
-        return mContact.isFavorite();
+    public void toggleFavourite() {
+        boolean isFavourite = mContact.isFavorite();
+        ContactDetail contactDetail = new ContactDetail();
+        contactDetail.setId(mContact.getId());
+        contactDetail.setFavorite(!isFavourite);
+        mContactRepository.editContactDetail(this,mContact.getId(), TOGGLE_FAVOURITE_API, contactDetail );
     }
 
     public boolean isFavourite() {
@@ -70,9 +98,23 @@ public class ContactDetailsPresenter extends BasePresenter implements RemoteServ
 
     @Override
     public void onSuccess(Object responseObject, int requestCode) {
-        ContactDetail contactDetail = (ContactDetail) responseObject;
-        mContactDetailsView.hideLoading();
-        setResponse(contactDetail);
+        if(responseObject!=null && responseObject instanceof ContactDetail) {
+            ContactDetail contactDetail = (ContactDetail) responseObject;
+            setContactDetail(contactDetail);
+            switch (requestCode) {
+                case CONTACT_DETAIL_REQUEST_CODE:
+                    mContactDetailsView.hideLoading();
+                    setResponse(contactDetail);
+                    break;
+
+                case TOGGLE_FAVOURITE_API:
+                    mContactDetailsView.hideLoading();
+                    mContact.setFavorite(contactDetail.isFavorite());
+                    mContactRepository.getLocalRepository().updateContact(mContact);
+                    mContactDetailsView.showFavourite(contactDetail.isFavorite());
+                break;
+            }
+        }
     }
 
     @Override
@@ -103,5 +145,9 @@ public class ContactDetailsPresenter extends BasePresenter implements RemoteServ
         if(null != mContactDetail) {
             mContactDetailsView.dial(mContactDetail.getPhoneNumber());
         }
+    }
+
+    public void setContactDetail(ContactDetail contactDetail){
+        mContactDetail = contactDetail;
     }
 }

@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +54,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     RecyclerView mDetailsRV;
     private ContactDetailsAdapter mContactDetailsAdapter;
     private ContactDetail mContactDetail;
+    private MenuItem mFavouriteItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +64,6 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
         Long contactID = -1L;
         if (getIntent() != null) {
             contactID = getIntent().getLongExtra(CONTACT_ID, -1);
-        }
-        if (contactID <= 0) {
-            Toast.makeText(this, "Contact not found", Toast.LENGTH_SHORT);
-            finish();
         }
         ((ContactsApplication) getApplicationContext()).getDeps().plus(new ContactDetailsModule(this, contactID)).inject(this);
         setSupportActionBar(mToolbar);
@@ -114,16 +113,25 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     }
 
     @Override
+    public void showFavourite(boolean isFavourite){
+        if(mFavouriteItem!=null) {
+            if (isFavourite) {
+                mFavouriteItem.setIcon(R.drawable.ic_favourite_filled);
+            } else {
+                mFavouriteItem.setIcon(R.drawable.ic_favourite);
+            }
+        }
+    }
+
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_favorite:
-                boolean isFavourite = mContactDetailsPresenter.toggleFavourite();
-                if (isFavourite) {
-                    item.setIcon(R.drawable.ic_favourite_filled);
-                } else {
-                    item.setIcon(R.drawable.ic_favourite);
-                }
+                mFavouriteItem = item;
+                mContactDetailsPresenter.toggleFavourite();
                 return true;
             case R.id.action_edit:
                 return true;
@@ -145,6 +153,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
         mContactDetailsAdapter.updateItems(contactDetailUIItems)
                 .notifyDataSetChanged();
         mContactDetail = contactDetail;
+        showFavourite(contactDetail.isFavorite());
     }
 
     @Override
@@ -166,6 +175,17 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
         } catch (SecurityException e){
             Log.e(TAG, "Call permission not checked");
         }
+    }
+
+    @Override
+    public void showInvalidContactAndExit() {
+        Toast.makeText(this, "Contact not found", Toast.LENGTH_SHORT);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ContactDetailsActivity.this.finish();
+            }
+        }, 2000);
     }
 
     @Override

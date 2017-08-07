@@ -44,6 +44,16 @@ public class ContactDetail extends ResponseObject implements Parcelable{
 
     }
 
+    public ContactDetail(long id, String firstName, String lastName, String email, String phoneNumber, String profilePic, boolean favorite) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.profilePic = profilePic;
+        this.favorite = favorite;
+    }
+
     protected ContactDetail(Parcel in) {
         id = in.readLong();
         firstName = in.readString();

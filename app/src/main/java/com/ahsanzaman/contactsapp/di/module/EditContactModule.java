@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.ahsanzaman.contactsapp.model.response.ContactDetail;
+import com.ahsanzaman.contactsapp.ui.module.contact.view.edit.EditContactView;
 
 import dagger.Module;
 import dagger.Provides;
@@ -24,8 +25,8 @@ public class EditContactModule {
     }
 
     @Provides
-    Context providesContext() {
-        return mActivity;
+    EditContactView providesView() {
+        return (EditContactView) mActivity;
     }
 
     @Provides

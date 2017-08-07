@@ -17,22 +17,20 @@ import javax.inject.Inject;
 
 public class AddContactPresenter extends BasePresenter {
 
-    private static final int ADD_CONTACT_REQUEST_CODE = 101;
-    private final IContactsService mContactsService;
+    public static final int ADD_CONTACT_REQUEST_CODE = 101;
     private final AddContactView mContactsView;
     private final IContactsRepository mContactsRepository;
 
     @Inject
-    public AddContactPresenter(IContactsService contactsService, Context context, IContactsRepository contactsRepository) {
-        super((BaseView) context);
-        mContactsService = contactsService;
-        mContactsView = (AddContactView) context;
+    public AddContactPresenter(AddContactView addContactView, IContactsRepository contactsRepository) {
+        super(addContactView);
+        mContactsView = addContactView;
         mContactsRepository = contactsRepository;
     }
 
     public void onSave() {
         mContactsView.showLoading();
-        mContactsService.addContactDetail(this, ADD_CONTACT_REQUEST_CODE, mContactsView.getContactDetail());
+        mContactsRepository.addContactDetail(this, ADD_CONTACT_REQUEST_CODE, mContactsView.getContactDetail());
     }
 
     @Override

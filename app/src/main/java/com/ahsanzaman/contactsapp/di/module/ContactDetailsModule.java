@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsActivity;
+import com.ahsanzaman.contactsapp.ui.module.contact.view.details.ContactDetailsView;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,8 +26,8 @@ public class ContactDetailsModule {
     }
 
     @Provides
-    Context providesContext() {
-        return mActivity;
+    ContactDetailsView providesContactDetailsView() {
+        return (ContactDetailsView) mActivity;
     }
 
     @Provides

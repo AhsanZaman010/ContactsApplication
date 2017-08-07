@@ -12,7 +12,11 @@ import java.util.List;
 
 public interface ContactDetailsView extends ContactableInteractiveView {
 
+    void showFavourite(boolean isFavourite);
+
     void bind(ContactDetail contactDetail, List<ContactDetailUIItem> contactDetailUIItems);
 
     void callNumber(String phoneNumber);
+
+    void showInvalidContactAndExit();
 }

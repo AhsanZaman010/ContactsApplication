@@ -18,18 +18,16 @@ import javax.inject.Inject;
 
 public class EditContactPresenter extends BasePresenter{
 
-    private static final int EDIT_CONTACT_REQUEST_CODE = 101;
-    private final IContactsService mContactsService;
+    public static final int EDIT_CONTACT_REQUEST_CODE = 101;
     private final EditContactView mEditContactView;
     private final IContactsRepository mContactsRepository;
     private final Contact mContact;
     private final ContactDetail mContactDetail;
 
     @Inject
-    public EditContactPresenter(IContactsService contactsService, Context activity, IContactsRepository contactsRepository, ContactDetail contactDetail) {
-        super((BaseView) activity);
-        mContactsService = contactsService;
-        mEditContactView = (EditContactView) activity;
+    public EditContactPresenter(EditContactView editContactView, IContactsRepository contactsRepository, ContactDetail contactDetail) {
+        super(editContactView);
+        mEditContactView = editContactView;
         mContactsRepository = contactsRepository;
         mContact = contactsRepository.getLocalRepository().getContactById(contactDetail.getId());
         mContactDetail = contactDetail;
@@ -37,7 +35,7 @@ public class EditContactPresenter extends BasePresenter{
 
     public void onSave() {
         mEditContactView.showLoading();
-        mContactsService.editContactDetail(this, mContact.getId(), EDIT_CONTACT_REQUEST_CODE,mEditContactView.getContactDetail());
+        mContactsRepository.editContactDetail(this, mContact.getId(), EDIT_CONTACT_REQUEST_CODE ,mEditContactView.getContactDetail());
     }
 
     @Override
