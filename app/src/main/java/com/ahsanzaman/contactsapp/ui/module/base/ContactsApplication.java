@@ -43,4 +43,7 @@ public class ContactsApplication extends Application {
         return deps;
     }
 
+    public void setDepComponent(DepComponent depComponent) {
+        this.deps = depComponent;
+    }
 }

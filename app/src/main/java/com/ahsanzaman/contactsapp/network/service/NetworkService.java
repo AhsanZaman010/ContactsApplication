@@ -18,10 +18,10 @@ import retrofit2.http.Path;
 
 public interface NetworkService {
 
-    @GET("/contacts.json")
+    @GET("/7qxy1")
     Observable<List<ContactResponse>> getContactList();
 
-    @GET("/contacts/{id}.json")
+    @GET("/8xt5l")
     Observable<ContactDetail> getContactDetail(@Path("id") String id);
 
     @PUT("/contacts/{id}.json")
